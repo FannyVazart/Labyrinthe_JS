@@ -1,0 +1,24 @@
+html {
+    background-color: blanchedalmond;
+    box-sizing: border-box;
+}
+
+#labtotal {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: black;
+    width: 900px;
+    height: 900px;
+    margin-left: 450px;
+}
+
+#elt {
+    border-top: 10px;
+    border-bottom: 10px;
+    border-left: 10px;
+    border-right: 5px;
+    border-style: groove;
+    border-color: red;
+    width: 285px;
+    height: 280px;
+}
