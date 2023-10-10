@@ -18,3 +18,9 @@ body {
     height: 50px;
     background-color: black;
 } 
+
+#pion {
+    width: 10px;
+    height: 10px;
+    background-color: aquamarine;
+}
