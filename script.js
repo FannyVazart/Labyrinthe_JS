@@ -1,38 +1,59 @@
+let size = 6;
+let ex = 'ex-0';
+let antiInifinityLOL = 0;
 
-function createLab(size, example) {
+let labyrinthe = createLab(size, ex);
+insertLabDOM(labyrinthe);
 
-    for (let i = 0; i < data[size][example].length; i++) {
+let solution = itDFSExit(labyrinthe);
+console.log(solution);
+
+function createLab(size, ex) {
+    return data[size][ex];
+}
+
+function getCell(labyrinthe, x, y) {
+    for (let cell of labyrinthe) {
+        if (cell.posX == x && cell.posY == y) {
+            return cell;
+        }
+    }
+}
+
+function insertLabDOM(labyrinthe) {
+
+    for (let i = 0; i < labyrinthe.length; i++) {
 
         let div = document.createElement("div");
         div.id = 'case';
 
-        if (data[size][example][i].entrance) {
+        if (labyrinthe[i].entrance) {
             div.style.backgroundColor = 'orange';
         }
 
-        if (data[size][example][i].exit) {
+        if (labyrinthe[i].exit) {
             div.style.backgroundColor = 'green';
         }
 
-        if (data[size][example][i].walls[0]) {
+        if (labyrinthe[i].walls[0]) {
             div.style.borderTopColor = 'red';
             div.style.borderStyle = 'solid';
             div.style.borderWidth = '1px';
         }
 
-        if (data[size][example][i].walls[1]) {
+        if (labyrinthe[i].walls[1]) {
             div.style.borderRightColor = 'red';
             div.style.borderStyle = 'solid';
             div.style.borderWidth = '1px';
         }
 
-        if (data[size][example][i].walls[2]) {
+        if (labyrinthe[i].walls[2]) {
             div.style.borderBottomColor = 'red';
             div.style.borderStyle = 'solid';
             div.style.borderWidth = '1px';
         }
 
-        if (data[size][example][i].walls[3]) {
+        if (labyrinthe[i].walls[3]) {
             div.style.borderLeftColor = 'red';
             div.style.borderStyle = 'solid';
             div.style.borderWidth = '1px';
@@ -45,72 +66,69 @@ function createLab(size, example) {
     }
 }
 
-createLab(6, "ex-0");
+function getAccessibleNeighbors(labyrinthe, posX, posY) {
+    let neighbors = [];
+    for (let i = 0; i < labyrinthe.length; i++) {
+        if (posX === labyrinthe[i]["posX"] && posY === labyrinthe[i]["posY"]) {
 
-function findExit(size, example) {
-
-
-
-    // posPersoX >= 0;
-    // posPersoX < size;
-    // posPersoY >= 0;
-    // posPersoY < size;
-
-    let posPersoX = 3;
-    let posPersoY = 4;
-
-    // while (posPersoX != size && posPersoY != size) {
-
-
-    let cellInfo = data[size][example];
-    let positions = [];
-
-    //  if (data[size][example][i].entrance) {
-    //     posPersoX = data[size][example][i].posX;
-    //     posPersoY = data[size][example][i].posY;
-    // }
-
-    for (let i = 0; i < data[size][example].length; i++) {
-
-        if (posPersoX === cellInfo[i]["posX"] && posPersoY === cellInfo[i]["posY"]) {
-
-            // let pion = document.createElement("div");
-            // pion.id = 'pion';
-            // document.getElementById("case").appendChild(pion);
-
-            console.log(cellInfo[i]);
-
-            if (cellInfo[i].walls[0] === false) {
-                posPersoX = posPersoX - 1;
+            if (labyrinthe[i].walls[0] === false) {
+                neighbors.push(getCell(labyrinthe, posX - 1, posY));
             }
 
-            else if (cellInfo[i].walls[3] === false) {
-                posPersoY = posPersoY - 1;
+            if (labyrinthe[i].walls[1] === false) {
+                neighbors.push(getCell(labyrinthe, posX, posY + 1));
             }
 
-            else if (cellInfo[i].walls[1] === false) {
-                posPersoY = posPersoY + 1;
+            if (labyrinthe[i].walls[2] === false) {
+                neighbors.push(getCell(labyrinthe, posX + 1, posY));
             }
 
-            else if (cellInfo[i].walls[2] === false) {
-                posPersoX = posPersoX + 1;
+            if (labyrinthe[i].walls[3] === false) {
+                neighbors.push(getCell(labyrinthe, posX, posY - 1));
             }
 
         }
     }
-
-    // "posX": 3,
-    // "posY": 4,
-    // "walls": [
-    //     false,
-    //     false,
-    //     true,
-    //     true
-    // ]
-    console.log(posPersoX, posPersoY);
-
+    return neighbors;
 }
+
+// function isExit() {
+//     if (getCell().entrance
 // }
 
-findExit(6, "ex-0");
+function itDFSExit(labyrinthe) {
+    let posJX = 0;
+    let posJY = 0;
+    let currentCell = getCell(labyrinthe, posJX, posJY);
+    let stack = [];
+    let visited = [];
+    let lastElStack = stack[stack.length - 1];
+    let exit = getCell(labyrinthe, size - 1, size - 1)
+
+    stack.push(currentCell);
+    visited.push(currentCell);
+
+    while (antiInifinityLOL < 100 && stack != []) {
+        antiInifinityLOL += 1;
+
+        stack.pop(lastElStack);
+
+        if (stack.indexOf(currentCell) === -1) {
+            stack.push(currentCell);
+
+            if (currentCell = exit) {
+                return [stack, visited];
+            } else {
+                getAccessibleNeighbors(labyrinthe, posJX, posJY).forEach((neighbor) => {
+                    if (stack.indexOf(neighbor) === -1) {
+                        visited.push(neighbor);
+                        stack.push(neighbor);
+                    }
+                })
+            }
+        }
+
+    }
+    return 'Undefined';
+}
 
