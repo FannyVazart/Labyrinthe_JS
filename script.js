@@ -1,4 +1,4 @@
-let size = 6;
+let size = 5;
 let ex = 'ex-0';
 let antiInifinityLOL = 0;
 
@@ -6,7 +6,6 @@ let labyrinthe = createLab(size, ex);
 insertLabDOM(labyrinthe);
 
 let solution = itDFSExit(labyrinthe);
-console.log(solution);
 
 function createLab(size, ex) {
     return data[size][ex];
@@ -96,36 +95,41 @@ function getAccessibleNeighbors(labyrinthe, posX, posY) {
 //     if (getCell().entrance
 // }
 
+function getAllVisited(data){
+    return data.filter(cell => cell.visited);
+}
+
 function itDFSExit(labyrinthe) {
-    let posJX = 0;
-    let posJY = 0;
-    let currentCell = getCell(labyrinthe, posJX, posJY);
+    let currentCell = getCell(labyrinthe, 0, 0);
     let stack = [];
-    let visited = [];
-    let lastElStack = stack[stack.length - 1];
-    let exit = getCell(labyrinthe, size - 1, size - 1)
+    // let visited = [];
 
     stack.push(currentCell);
-    visited.push(currentCell);
+    // visited.push(currentCell);
 
-    while (antiInifinityLOL < 100 && stack != []) {
+    while (antiInifinityLOL < 100 && stack.length>0) {
         antiInifinityLOL += 1;
 
-        stack.pop(lastElStack);
+        currentCell = stack.pop();
+        if (currentCell.exit) {
+            console.log("j'ai trouvé la sortie", currentCell);
+            return [stack, getAllVisited(labyrinthe)];
+        } 
 
-        if (stack.indexOf(currentCell) === -1) {
-            stack.push(currentCell);
+        if (!currentCell.visited){
+            currentCell.visited = true; 
+        // if (visited.indexOf(currentCell) === -1) {
+            // stack.push(currentCell);
 
-            if (currentCell = exit) {
-                return [stack, visited];
-            } else {
-                getAccessibleNeighbors(labyrinthe, posJX, posJY).forEach((neighbor) => {
-                    if (stack.indexOf(neighbor) === -1) {
-                        visited.push(neighbor);
-                        stack.push(neighbor);
-                    }
-                })
-            }
+            
+            let neighbors = getAccessibleNeighbors(labyrinthe, currentCell.posX, currentCell.posY);
+            neighbors.forEach( neighbor => {
+                if ( !neighbor.visited ) {
+                    // visited.push(neighbor);
+                    stack.push(neighbor);
+                }
+            })
+            
         }
 
     }
