@@ -1,11 +1,12 @@
 let size = 5;
-let ex = 'ex-0';
-let antiInifinityLOL = 0;
+let ex = 'ex-2';
+let antiEndlessLoop = 0;
 
 let labyrinthe = createLab(size, ex);
 insertLabDOM(labyrinthe);
 
-let solution = itDFSExit(labyrinthe);
+// let solutionDFS = DFSExit(labyrinthe);
+let solutionBFS = BFSExit(labyrinthe);
 
 function createLab(size, ex) {
     return data[size][ex];
@@ -65,6 +66,7 @@ function insertLabDOM(labyrinthe) {
     }
 }
 
+
 function getAccessibleNeighbors(labyrinthe, posX, posY) {
     let neighbors = [];
     for (let i = 0; i < labyrinthe.length; i++) {
@@ -91,48 +93,89 @@ function getAccessibleNeighbors(labyrinthe, posX, posY) {
     return neighbors;
 }
 
-// function isExit() {
-//     if (getCell().entrance
-// }
-
-function getAllVisited(data){
+function getAllVisited(data) {
     return data.filter(cell => cell.visited);
 }
 
-function itDFSExit(labyrinthe) {
-    let currentCell = getCell(labyrinthe, 0, 0);
+function DFSExit(labyrinthe) {
+    let currentCell = getCell(labyrinthe, 0, 4);
+    currentCell.id = 'curcel';
     let stack = [];
-    // let visited = [];
+    let path = [];
 
     stack.push(currentCell);
-    // visited.push(currentCell);
 
-    while (antiInifinityLOL < 100 && stack.length>0) {
-        antiInifinityLOL += 1;
+    while (antiEndlessLoop < 500 && stack.length > 0) {
+        antiEndlessLoop += 1;
 
         currentCell = stack.pop();
+        path.push(currentCell);
+
         if (currentCell.exit) {
-            console.log("j'ai trouvé la sortie", currentCell);
-            return [stack, getAllVisited(labyrinthe)];
-        } 
+            console.log("RESOLUUUU", currentCell, path);
+            return [stack, getAllVisited(labyrinthe), path];
+        }
 
-        if (!currentCell.visited){
-            currentCell.visited = true; 
-        // if (visited.indexOf(currentCell) === -1) {
-            // stack.push(currentCell);
+        if (!currentCell.visited) {
+            currentCell.visited = true;
 
-            
             let neighbors = getAccessibleNeighbors(labyrinthe, currentCell.posX, currentCell.posY);
-            neighbors.forEach( neighbor => {
-                if ( !neighbor.visited ) {
-                    // visited.push(neighbor);
+            neighbors.forEach(neighbor => {
+                if (!neighbor.visited) {
                     stack.push(neighbor);
                 }
             })
-            
+
         }
 
     }
     return 'Undefined';
 }
 
+function BFSExit(labyrinthe) {
+    let currentCell = getCell(labyrinthe, 0, 4);
+    currentCell.id = 'curcel';
+    let queue = [];
+    let path = [];
+
+    queue.push(currentCell);
+    path.push(currentCell);
+
+    while (antiEndlessLoop < 5000 && queue.length > 0) {
+        antiEndlessLoop += 1;
+
+        currentCell = queue.shift();
+
+        if (currentCell.exit) {
+            console.log("RESOLUUUU", currentCell, getAllVisited(labyrinthe));
+            return [queue, getAllVisited(labyrinthe), path];
+        }
+
+        if (!currentCell.visited) {
+            currentCell.visited = true;
+
+            let neighbors = getAccessibleNeighbors(labyrinthe, currentCell.posX, currentCell.posY);
+            neighbors.forEach(neighbor => {
+                if (!neighbor.visited) {
+                    queue.push(neighbor);
+                }
+            })
+
+        }
+
+    }
+    return 'Undefined';
+}
+
+// function pathDOM(path) {
+//     for (let i = 0; i < path.length; i++) {
+
+//         let activCell = document.createElement("div");
+//         div.id = 'activeCell';
+        
+//         activCell = path[i];
+
+//         let labtotal = document.getElementById("labtotal");
+//         labtotal.appendChild(activCell);
+//     }
+// }
